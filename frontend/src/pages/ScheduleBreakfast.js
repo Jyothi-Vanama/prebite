@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import './ScheduleBreakfast.css';
+import idliImage from '../assets/breakfasts/idli.jpg';
+import dosaImage from '../assets/breakfasts/dosa.png';
+import pongalImage from '../assets/breakfasts/pongal.jpg';
+import upmaImage from '../assets/breakfasts/upma.jpg';
+import coffeeImage from '../assets/breakfasts/coffee.jpg';
+import teaImage from '../assets/breakfasts/tea.jpg';
 
 const foodItems = [
-  { id: 1, name: "Idli", price: 40, emoji: "🧇" },
-  { id: 2, name: "Dosa", price: 60, emoji: "🥞" },
-  { id: 3, name: "Pongal", price: 55, emoji: "🍚" },
-  { id: 4, name: "Upma", price: 45, emoji: "🥣" },
-  { id: 5, name: "Coffee", price: 25, emoji: "☕" },
-  { id: 6, name: "Tea", price: 20, emoji: "🍵" },
+  { id: 1, name: "Idli", price: 40, image: idliImage },
+  { id: 2, name: "Dosa", price: 60, image: dosaImage },
+  { id: 3, name: "Pongal", price: 55, image: pongalImage },
+  { id: 4, name: "Upma", price: 45, image: upmaImage },
+  { id: 5, name: "Coffee", price: 25, image: coffeeImage },
+  { id: 6, name: "Tea", price: 20, image: teaImage }
 ];
 
 const ScheduleBreakfast = () => {
@@ -44,7 +50,14 @@ const ScheduleBreakfast = () => {
                 className={`food-card ${selectedFoods.find(f => f.id === food.id) ? 'selected' : ''}`}
                 onClick={() => toggleFood(food)}
               >
-                <div className="food-emoji">{food.emoji}</div>
+                {selectedFoods.find(f => f.id === food.id) && (
+  <div className="selected-badge">✓ Selected</div>
+)}
+                {food.image ? (
+  <img src={food.image} alt={food.name} className="food-image" />
+) : (
+  <div className="food-emoji">{food.emoji}</div>
+)}
                 <div className="food-name">{food.name}</div>
                 <div className="food-price">₹{food.price}</div>
               </div>
@@ -80,12 +93,33 @@ const ScheduleBreakfast = () => {
             </select>
           </div>
 
-          <div className="backup">
-            <h3>Backup Preferences</h3>
-            <input type="text" placeholder="Backup 1 (optional)" />
-            <input type="text" placeholder="Backup 2 (optional)" />
-          </div>
-        </div>
+         <div className="backup-section">
+  <h3>Backup Preferences</h3>
+
+  <div className="form-group">
+    <label>Backup Food 1</label>
+    <select>
+      <option value="">Select Backup Food</option>
+      <option>Idli</option>
+      <option>Dosa</option>
+      <option>Pongal</option>
+      <option>Upma</option>
+    </select>
+  </div>
+
+  <div className="form-group">
+    <label>Backup Food 2</label>
+    <select>
+      <option value="">Select Backup Food</option>
+      <option>Idli</option>
+      <option>Dosa</option>
+      <option>Pongal</option>
+      <option>Upma</option>
+    </select>
+  </div>
+</div>
+
+        </div> {/* end of selection-panel */}
 
         {/* Right Side - Summary */}
         <div className="summary-panel">
@@ -105,9 +139,9 @@ const ScheduleBreakfast = () => {
                   <span>₹{schedulingFee}</span>
                 </div>
                 <div className="total">
-                  <strong>Total</strong>
-                  <strong>₹{total}</strong>
-                </div>
+  <strong>Total</strong>
+  <strong>₹{total}</strong>
+</div>
               </>
             ) : (
               <p>Select items to see summary</p>

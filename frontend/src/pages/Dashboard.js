@@ -1,85 +1,158 @@
 import React from 'react';
-import DashboardCard from '../components/DashboardCard';
+//import DashboardCard from '../components/DashboardCard';
 import './Dashboard.css';
+import idliImage from '../assets/breakfasts/idli.jpg';
+import dosaImage from '../assets/breakfasts/dosa.png';
+import pongalImage from '../assets/breakfasts/pongal.jpg';
+import upmaImage from '../assets/breakfasts/upma.jpg';
+
 
 const Dashboard = () => {
-  const todaysBreakfast = {
-    items: "2 Idli + 1 Coffee",
-    time: "7:15 AM",
-    platform: "Swiggy",
-    status: "Scheduled"
-  };
+  const nextBreakfast = {
+  items: "Masala Dosa + Filter Coffee",
+  day: "Tomorrow",
+  time: "7:15 AM",
+  platform: "Swiggy",
+  status: "Scheduled"
+};
 
   return (
     <div className="dashboard">
       <div className="welcome-banner">
-        <h1>Good Morning, Jyothi ☀️</h1>
-        <p>Ready to plan your perfect breakfast?</p>
+        <h1>PreBite Dashboard</h1>
+        <p>Organized • Convenient • Scheduled</p>
       </div>
+
+      <div className="popular-breakfasts">
+  <h2>Popular Breakfasts</h2>
+
+  <div className="breakfast-cards">
+
+    <div
+  className="breakfast-card"
+  onClick={() => alert("Schedule Idli")}
+>
+  <img src={idliImage} alt="Idli" className="breakfast-image" />
+
+  <h3>Idli</h3>
+
+  <p>Healthy & Light</p>
+</div>
+
+    <div
+  className="breakfast-card"
+  onClick={() => alert("Schedule Dosa")}
+>
+  <img src={dosaImage} alt="Dosa" className="breakfast-image" />
+
+  <h3>Dosa</h3>
+
+  <p>Crispy & Delicious</p>
+</div>
+
+    <div
+  className="breakfast-card"
+  onClick={() => alert("Schedule Pongal")}
+>
+  <img src={pongalImage} alt="Pongal" className="breakfast-image" />
+
+  <h3>Pongal</h3>
+
+  <p>South Indian Favorite</p>
+</div>
+
+    <div
+  className="breakfast-card"
+  onClick={() => alert("Schedule Upma")}
+>
+  <img src={upmaImage} alt="Upma" className="breakfast-image" />
+
+  <h3>Upma</h3>
+
+  <p>Quick Morning Meal</p>
+</div>
+
+  </div>
+</div>
 
       <div className="dashboard-grid">
         {/* Today's Breakfast */}
         <div className="card today-breakfast">
-          <h2>Today's Breakfast</h2>
+          <h2> Next Scheduled Breakfast</h2>
           <div className="breakfast-details">
-            <div className="food-item">{todaysBreakfast.items}</div>
-            <div className="meta">
-              <span>🕒 {todaysBreakfast.time}</span>
-              <span>📦 {todaysBreakfast.platform}</span>
-            </div>
+            <div className="food-item">{nextBreakfast.items}</div>
+
+<div className="breakfast-meta">
+  <p>{nextBreakfast.day}</p>
+  <p>{nextBreakfast.time}</p>
+  <p>{nextBreakfast.platform}</p>
+</div>
             <div className="status status-scheduled">Scheduled</div>
           </div>
-          <button className="btn btn-primary">Modify Order</button>
+          <div className="hero-actions">
+  <button className="btn btn-primary">
+    Modify
+  </button>
+
+  <button className="btn btn-secondary">
+    Cancel
+  </button>
+</div>
         </div>
 
-        {/* Wallet Summary */}
+        {/* Wallet Summary 
         <div className="wallet-section">
-          <DashboardCard title="Current Balance" amount="₹1,250" />
+          <DashboardCard title="Wallet Balance" amount="₹1,250" />
           <div className="two-cards">
-            <DashboardCard title="Reserved" amount="₹450" subtitle="For scheduled orders" />
-            <DashboardCard title="Available" amount="₹800" subtitle="Can be used now" />
           </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="card quick-actions">
-          <h2>Quick Actions</h2>
-          <div className="action-buttons">
-            <a href="/schedule" className="btn btn-primary">Schedule Breakfast</a>
-            <a href="/wallet" className="btn btn-secondary">Add Money</a>
-            <a href="/orders" className="btn btn-secondary">View All Orders</a>
-          </div>
-        </div>
+        </div> 
+        */}
 
         {/* Upcoming Schedules */}
         <div className="card upcoming">
-          <h2>Upcoming Schedules</h2>
+          <h2>Upcoming Breakfasts (2)</h2>
           <div className="schedule-list">
             <div className="schedule-item">
-              <div>Tomorrow • 7:30 AM</div>
-              <div>1 Dosa + Tea • Zomato</div>
-            </div>
+  <div>
+    <strong> 1 Dosa + Tea</strong>
+    <p> Tomorrow •  7:30 AM</p>
+    <p> Zomato</p>
+  </div>
+</div>
             <div className="schedule-item">
-              <div>Thu, 25 Jun • 8:00 AM</div>
-              <div>2 Pongal + Coffee • Swiggy</div>
-            </div>
+  <div>
+    <strong> 2 Pongal + Coffee</strong>
+    <p> Thu, 25 Jun •  8:00 AM</p>
+    <p> Swiggy</p>
+  </div>
+</div>
           </div>
         </div>
 
         {/* Recent Orders */}
-        <div className="card recent-orders">
-          <h2>Recent Orders</h2>
-          <div className="order-list">
-            <div className="order-item">
-              <span>22 Jun • 2 Idli</span>
-              <span className="amount">₹85</span>
-            </div>
-            <div className="order-item">
-              <span>21 Jun • Pongal</span>
-              <span className="amount">₹65</span>
-            </div>
-          </div>
-        </div>
+        {/* Recent Activity */}
+{/*<div className="card recent-orders">
+  <h2>📜 Recent Activity</h2>
+
+  <div className="order-list">
+
+    <div className="order-item">
+      <span>🍳 Breakfast Scheduled</span>
+      <span>2h ago</span>
+    </div>
+
+    <div className="order-item">
+      <span>💰 Refund Processed</span>
+      <span>Yesterday</span>
+    </div>
+
+    <div className="order-item">
+      <span>✅ Order Executed</span>
+      <span>21 Jun</span>
+    </div>
+
+  </div>
+</div>*/}
       </div>
     </div>
   );
