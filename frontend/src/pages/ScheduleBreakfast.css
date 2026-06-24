@@ -1,0 +1,90 @@
+.schedule-page h1 {
+  margin-bottom: 2rem;
+  color: #2D3748;
+}
+
+.schedule-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.food-card {
+  background: white;
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.food-card:hover {
+  border-color: #FF7A30;
+  transform: translateY(-4px);
+}
+
+.food-card.selected {
+  border-color: #FF7A30;
+  background: #FFF4E8;
+}
+
+.food-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.food-name { font-weight: 600; }
+.food-price { color: #FF7A30; font-weight: 600; }
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #E2E8F0;
+  font-size: 1.3rem;
+}
+
+.schedule-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 992px) {
+  .schedule-container {
+    grid-template-columns: 1fr;
+  }
+}

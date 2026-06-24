@@ -1,0 +1,67 @@
+:root {
+  --primary: #FF7A30;
+  --secondary: #FFF4E8;
+  --success: #2ECC71;
+  --background: #F8FAFC;
+  --card: #FFFFFF;
+  --text: #2D3748;
+  --text-light: #718096;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #e66a28;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #EDF2F7;
+  color: var(--text);
+}
+
+.btn-secondary:hover {
+  background: #E2E8F0;
+}
+
+/* Status badges */
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-scheduled { background: #FEF3C7; color: #D97706; }
+.status-completed { background: #D1FAE5; color: #10B981; }
+.status-cancelled { background: #FEE2E2; color: #EF4444; }
+.status-refunded { background: #E0E7FF; color: #6366F1; }
+.status-failed { background: #FEE2E2; color: #EF4444; }
