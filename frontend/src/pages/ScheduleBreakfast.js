@@ -17,23 +17,32 @@ const foodItems = [
 ];
 
 const ScheduleBreakfast = () => {
-  const [selectedFoods, setSelectedFoods] = useState([]);
-  const [quantity, setQuantity] = useState(1);
-  const [date, setDate] = useState("2026-06-24");
-  const [time, setTime] = useState("07:30");
-  const [platform, setPlatform] = useState("Swiggy");
 
-  const toggleFood = (food) => {
-    if (selectedFoods.find(f => f.id === food.id)) {
-      setSelectedFoods(selectedFoods.filter(f => f.id !== food.id));
-    } else {
-      setSelectedFoods([...selectedFoods, food]);
-    }
-  };
+const [quantities, setQuantities] = useState(
+  Object.fromEntries(
+    foodItems.map(food => [food.id, 0])
+  )
+);
+const [fromDate, setFromDate] = useState("2026-06-24");
+const [toDate, setToDate] = useState("2026-06-24");
+const [time, setTime] = useState("07:30");
+const [platform, setPlatform] = useState("Swiggy");
+const [showSuccess, setShowSuccess] = useState(false);
 
-  const totalFoodCost = selectedFoods.reduce((sum, food) => sum + food.price * quantity, 0);
+  const totalFoodCost = foodItems.reduce(
+  (sum, food) => sum + food.price * quantities[food.id],
+  0
+);
   const schedulingFee = 20;
   const total = totalFoodCost + schedulingFee;
+
+  const days =
+  Math.floor(
+    (new Date(toDate) - new Date(fromDate)) /
+    (1000 * 60 * 60 * 24)
+  ) + 1;
+
+const grandTotal = (totalFoodCost * days) + schedulingFee;
 
   return (
     <div className="schedule-page">
@@ -42,46 +51,80 @@ const ScheduleBreakfast = () => {
       <div className="schedule-container">
         {/* Left Side - Selection */}
         <div className="selection-panel">
-          <h2>Choose Items</h2>
+          {/* <h2>Choose Items</h2>
           <div className="food-grid">
             {foodItems.map(food => (
-              <div 
-                key={food.id} 
-                className={`food-card ${selectedFoods.find(f => f.id === food.id) ? 'selected' : ''}`}
-                onClick={() => toggleFood(food)}
-              >
-                {selectedFoods.find(f => f.id === food.id) && (
-  <div className="selected-badge">✓ Selected</div>
-)}
+              <div
+  key={food.id}
+  className={`food-card ${
+    quantities[food.id] > 0 ? "selected" : ""
+  }`}
+>
+
                 {food.image ? (
   <img src={food.image} alt={food.name} className="food-image" />
 ) : (
   <div className="food-emoji">{food.emoji}</div>
 )}
                 <div className="food-name">{food.name}</div>
-                <div className="food-price">₹{food.price}</div>
-              </div>
-            ))}
-          </div>
+<div className="food-price">₹{food.price}</div>
 
-          <div className="form-group">
-            <label>Quantity</label>
-            <input 
-              type="number" 
-              min="1" 
-              value={quantity} 
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
-            />
-          </div>
+    <div className="quantity-controls">
+
+  <button
+    disabled={quantities[food.id] === 0}
+    onClick={(e) => {
+      e.stopPropagation();
+      if (quantities[food.id] > 0) {
+        setQuantities({
+          ...quantities,
+          [food.id]: quantities[food.id] - 1
+        });
+      }
+    }}
+  >
+    −
+  </button>
+
+  <span>{quantities[food.id]}</span>
+
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setQuantities({
+        ...quantities,
+        [food.id]: quantities[food.id] + 1
+      });
+    }}
+  >
+    +
+  </button>
+
+</div>
+  </div>
+            ))}
+          </div> */}
 
           <div className="form-row">
             <div className="form-group">
-              <label>Date</label>
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <label>Schedule From</label>
+              <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
             </div>
             <div className="form-group">
-              <label>Time</label>
-              <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+              <label>Schedule To</label>
+              <input
+  type="date"
+  value={toDate}
+  min={fromDate}
+  max={
+    new Date(
+      new Date(fromDate).getTime() + 6 * 24 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .split("T")[0]
+  }
+  onChange={(e) => setToDate(e.target.value)}
+/>
             </div>
           </div>
 
@@ -125,34 +168,116 @@ const ScheduleBreakfast = () => {
         <div className="summary-panel">
           <div className="cost-summary card">
             <h2>Order Summary</h2>
-            {selectedFoods.length > 0 ? (
+            {foodItems.some(food => quantities[food.id] > 0) ? (
               <>
-                {selectedFoods.map(food => (
-                  <div key={food.id} className="summary-item">
-                    <span>{food.name} × {quantity}</span>
-                    <span>₹{food.price * quantity}</span>
-                  </div>
-                ))}
+                {foodItems
+                  .filter(food => quantities[food.id] > 0)
+                  .map(food => (
+                    <div key={food.id} className="summary-item">
+                      <span>{food.name} × {quantities[food.id]}</span>
+                      <span>₹{food.price * quantities[food.id]}</span>
+                    </div>
+                  ))}
+
                 <hr />
-                <div className="summary-item">
-                  <span>Scheduling Fee</span>
-                  <span>₹{schedulingFee}</span>
-                </div>
-                <div className="total">
-  <strong>Total</strong>
-  <strong>₹{total}</strong>
+
+<div className="summary-item">
+  <span><strong>Per Day Cost</strong></span>
+  <span><strong>₹{totalFoodCost}</strong></span>
+</div>
+
+<div className="summary-item">
+  <span>Duration</span>
+  <span>{days} Days</span>
+</div>
+
+<div className="summary-item">
+  <span><strong>Breakfast Total</strong></span>
+  <span><strong>₹{totalFoodCost * days}</strong></span>
+</div>
+
+<hr />
+
+<div className="summary-item">
+  <span>One-Time Scheduling Fee</span>
+  <span>₹{schedulingFee}</span>
+</div>
+
+<div className="total">
+  <strong>Grand Total</strong>
+  <strong>₹{grandTotal}</strong>
 </div>
               </>
             ) : (
               <p>Select items to see summary</p>
             )}
             
-            <button className="btn btn-primary schedule-btn">
-              Schedule for {time} on {date}
-            </button>
+            <button
+  className="btn btn-primary schedule-btn"
+  onClick={() => setShowSuccess(true)}
+>
+  Schedule Breakfast
+  <br />
+  {new Date(fromDate).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  })}
+  {" - "}
+  {new Date(toDate).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  })}
+</button>
           </div>
         </div>
       </div>
+      {showSuccess && (
+  <div className="modal-overlay">
+    <div className="success-modal">
+
+      <div className="success-icon">✅</div>
+
+      <h2>Breakfast Scheduled!</h2>
+
+      <p>Your breakfast has been scheduled successfully.</p>
+
+      <hr />
+
+      <p>
+        <strong>Duration:</strong><br />
+        {new Date(fromDate).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+        {" - "}
+        {new Date(toDate).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+      </p>
+
+      <p>
+        <strong>Platform:</strong> {platform}
+      </p>
+
+      <p>
+        <strong>Grand Total:</strong> ₹{grandTotal}
+      </p>
+
+      <button
+        className="btn btn-primary"
+        onClick={() => setShowSuccess(false)}
+      >
+        Close
+      </button>
+
+    </div>
+  </div>
+)}
     </div>
   );
 };

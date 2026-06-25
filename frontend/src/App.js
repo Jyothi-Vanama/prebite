@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Wallet from './pages/Wallet';
-import ScheduleBreakfast from './pages/ScheduleBreakfast';
+import ScheduleBreakfast from './pages/ScheduleBreakfastV2';
 import Orders from './pages/Orders';
 import './styles/App.css';
 
