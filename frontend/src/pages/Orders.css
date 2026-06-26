@@ -113,3 +113,105 @@
   background:#ffeaea;
   color:#e23744;
 }
+
+.upcoming-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.upcoming-status{
+    background:#fff3d6;
+    color:#d97706;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.upcoming-food{
+    margin:0 0 18px;
+    color:#24324a;
+    font-size:26px;
+    font-weight:700;
+}
+
+.upcoming-details{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+}
+
+.upcoming-details div{
+    color:#64748B;
+    font-size:15px;
+    font-weight:500;
+}
+
+.upcoming-details span{
+    color:#24324a;
+    font-weight:600;
+}
+
+.detail-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:10px 0;
+}
+
+.detail-row span:first-child{
+    color:#64748B;
+    font-weight:500;
+}
+
+.detail-total{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin:14px 0 8px;
+    padding:10px 14px;
+
+    background:#FFF8F3;
+    border-radius:10px;
+
+    font-size:20px;
+    font-weight:700;
+}
+
+.modal-content hr{
+    margin:18px 0;
+    border:none;
+    border-top:1px solid #E5E7EB;
+}
+
+.modal-content button{
+    width:100%;
+    margin-top:6px;
+}
+
+.modal-content{
+    position:relative;
+        background:white;
+    padding:1.5rem;
+}
+
+.modal-content h2{
+    margin-bottom:14px;
+}
+
+.empty-orders{
+    text-align:center;
+    padding:60px 20px;
+}
+
+.empty-orders h3{
+    margin:12px 0 6px;
+    color:#1E293B;
+}
+
+.empty-orders p{
+    color:#64748B;
+}

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 //import DashboardCard from '../components/DashboardCard';
 import './Dashboard.css';
 import idliImage from '../assets/breakfasts/idli.jpg';
@@ -8,18 +9,47 @@ import upmaImage from '../assets/breakfasts/upma.jpg';
 
 
 const Dashboard = () => {
-  const nextBreakfast = {
-  items: "Masala Dosa + Filter Coffee",
-  day: "Tomorrow",
-  time: "7:15 AM",
-  platform: "Swiggy",
-  status: "Scheduled"
-};
+
+const [dashboardData, setDashboardData] = useState({
+  full_name: "Loading...",
+  items: "",
+  schedule_date: "",
+  schedule_time: "",
+  platform_name: "",
+  schedule_status: ""
+});
+
+const [upcomingBreakfasts, setUpcomingBreakfasts] = useState([]);
+
+useEffect(() => {
+  axios
+    .get("http://localhost:5000/user/dashboard")
+    .then((res) => {
+      setDashboardData(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}, []);
+
+useEffect(() => {
+  axios
+    .get("http://localhost:5000/user/upcoming")
+    .then((res) => {
+      console.log("Upcoming:", res.data);
+      setUpcomingBreakfasts(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}, []);
 
   return (
     <div className="dashboard">
       <div className="welcome-banner">
-        <h1>PreBite Dashboard</h1>
+        <h1>
+  Welcome{dashboardData.full_name ? `, ${dashboardData.full_name}` : ""} 👋
+</h1>
         <p>Organized • Convenient • Scheduled</p>
       </div>
 
@@ -80,14 +110,30 @@ const Dashboard = () => {
         <div className="card today-breakfast">
           <h2> Next Scheduled Breakfast</h2>
           <div className="breakfast-details">
-            <div className="food-item">{nextBreakfast.items}</div>
+            <div className="food-item">{dashboardData.items}</div>
 
 <div className="breakfast-meta">
-  <p>{nextBreakfast.day}</p>
-  <p>{nextBreakfast.time}</p>
-  <p>{nextBreakfast.platform}</p>
+  <p>
+  {new Date(dashboardData.schedule_date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  })}
+</p>
+  <p>
+  {new Date(
+    `1970-01-01T${dashboardData.schedule_time}`
+  ).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  })}
+</p>
+  <p>{dashboardData.platform_name}</p>
 </div>
-            <div className="status status-scheduled">Scheduled</div>
+            <div className="status status-scheduled">
+  {dashboardData.schedule_status.charAt(0) +
+ dashboardData.schedule_status.slice(1).toLowerCase()}
+</div>
           </div>
           <div className="hero-actions">
   <button className="btn btn-primary">
@@ -112,21 +158,30 @@ const Dashboard = () => {
         <div className="card upcoming">
           <h2>Upcoming Breakfasts (2)</h2>
           <div className="schedule-list">
-            <div className="schedule-item">
-  <div>
-    <strong> 1 Dosa + Tea</strong>
-    <p> Tomorrow •  7:30 AM</p>
-    <p> Zomato</p>
-  </div>
+  {upcomingBreakfasts.map((item, index) => (
+    <div className="schedule-item" key={index}>
+      <div>
+        <strong>{item.items}</strong>
+
+        <p>
+          {new Date(item.schedule_date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+          {" • "}
+          {new Date(`1970-01-01T${item.schedule_time}`).toLocaleTimeString("en-US", {
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+})}
+        </p>
+
+        <p>{item.platform_name}</p>
+      </div>
+    </div>
+  ))}
 </div>
-            <div className="schedule-item">
-  <div>
-    <strong> 2 Pongal + Coffee</strong>
-    <p> Thu, 25 Jun •  8:00 AM</p>
-    <p> Swiggy</p>
-  </div>
-</div>
-          </div>
         </div>
 
         {/* Recent Orders */}

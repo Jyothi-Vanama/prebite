@@ -24,10 +24,17 @@ const ScheduleBreakfast = () => {
   const [platform, setPlatform] = useState('Swiggy');
   const [showSuccess, setShowSuccess] = useState(false);
   const [searchTexts, setSearchTexts] = useState({});
-  const [activeDay, setActiveDay] = useState(0);
+ const [activeDays, setActiveDays] = useState([0]);
 
   const schedulingFee = 20;
 
+  const toggleDay = (index) => {
+  setActiveDays((prev) =>
+    prev.includes(index)
+      ? prev.filter((day) => day !== index)
+      : [...prev, index]
+  );
+};
   useEffect(() => {
     const start = new Date(fromDate);
     const end = new Date(toDate);
@@ -45,7 +52,7 @@ const ScheduleBreakfast = () => {
     }
 
     setPlanner(generatedPlanner);
-    setActiveDay(0);
+    setActiveDays([0]);
   }, [fromDate, toDate, platform]);
 
   const plannerTotal = planner.reduce((total, day) => {
@@ -93,15 +100,15 @@ const ScheduleBreakfast = () => {
             {planner.map((day, index) => (
               <div
                 key={day.date}
-                className={`planner-card ${activeDay === index ? 'active-day' : ''}`}
+                className={`planner-card ${activeDays.includes(index) ? 'active-day' : ''}`}
                 
               >
                 <h3
                   className="planner-header"
-                  onClick={() => setActiveDay(activeDay === index ? -1 : index)}
+                  onClick={() => toggleDay(index)}
                 >
                   <span>
-                    {activeDay === index ? '▼' : '▶'}{' '}
+                    {activeDays.includes(index) ? '▼' : '▶'}{' '}
                     {new Date(day.date).toLocaleDateString('en-GB', {
                       day: 'numeric',
                       month: 'short',
@@ -110,7 +117,7 @@ const ScheduleBreakfast = () => {
                   </span>
                 </h3>
 
-                {activeDay === index && (
+                {activeDays.includes(index) && (
                   <div className="planner-details">
                     <div className="form-group">
                       <label>Platform</label>
@@ -285,8 +292,11 @@ const ScheduleBreakfast = () => {
                     })}
                   </h4>
 
-                  <p className="summary-platform">Platform: {day.platform}</p>
-                  <p className="summary-time">Delivery: {day.deliveryTime}</p>
+                  <div className="summary-meta">
+    <span>{day.platform}</span>
+    <span>•</span>
+    <span>{day.deliveryTime}</span>
+</div>
 
                   {day.items.map((item, itemIndex) => (
                     <div key={`${item.id}-${itemIndex}`} className="summary-item">
@@ -297,21 +307,24 @@ const ScheduleBreakfast = () => {
                     </div>
                   ))}
 
-                  <div className="summary-item day-total">
-                    <strong>Day Total</strong>
-                    <strong>₹{dayTotal}</strong>
-                  </div>
-                  <hr />
                 </div>
               );
             })}
 
-            <p>Subtotal: ₹{plannerTotal.toFixed(2)}</p>
-            <p>Scheduling Fee: ₹{schedulingFee.toFixed(2)}</p>
+            <div className="summary-item">
+    <span>Items Total</span>
+    <span>₹{plannerTotal.toFixed(2)}</span>
+</div>
+
+<div className="summary-item">
+    <span>Scheduling Fee</span>
+    <span>₹{schedulingFee.toFixed(2)}</span>
+</div>
             <hr />
-            <p>
-              <strong>Grand Total:</strong> ₹{grandTotal.toFixed(2)}
-            </p>
+            <div className="summary-item grand-total">
+    <strong>Grand Total</strong>
+    <strong>₹{grandTotal.toFixed(2)}</strong>
+</div>
 
             <button
               className="btn btn-primary schedule-btn"

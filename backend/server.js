@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const db = require("./config/db");
 const walletRoutes = require("./routes/walletRoutes");
 const scheduleRoutes = require("./routes/scheduleRoutes");
@@ -7,7 +8,9 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+
 app.use("/wallet", walletRoutes);
 app.use("/order", orderRoutes);
 app.use("/schedule", scheduleRoutes);

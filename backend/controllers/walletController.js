@@ -39,6 +39,59 @@ const addMoney = (req, res) => {
 
 };
 
-module.exports = {
-    addMoney
+const getWallet = (req, res) => {
+
+    const sql = `
+        SELECT
+            current_balance AS balance,
+            reserved_amount AS reserved,
+            (current_balance - reserved_amount) AS available
+        FROM wallet
+        LIMIT 1
+    `;
+
+    db.query(sql, (err, result) => {
+
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+
+        res.json(result[0]);
+
+    });
+
 };
+
+const getTransactions = (req, res) => {
+
+    const sql = `
+        SELECT
+    transaction_id,
+    transaction_type,
+    amount,
+    description,
+    transaction_date
+FROM wallet_transactions
+ORDER BY transaction_date DESC
+    `;
+
+    db.query(sql, (err, result) => {
+
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+
+        res.json(result);
+
+    });
+
+};
+
+module.exports = {
+    addMoney,
+    getWallet,
+    getTransactions
+};
+

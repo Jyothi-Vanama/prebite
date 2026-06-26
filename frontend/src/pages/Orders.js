@@ -1,24 +1,39 @@
-import React, { useState } from 'react';
 import './Orders.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Orders = () => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const orders = [
-    { id: "#PB2401", date: "22 Jun 2026", items: "2 Idli + Coffee", amount: 105, platform: "Swiggy", status: "Completed" },
-    { id: "#PB2402", date: "21 Jun 2026", items: "Dosa", amount: 60, platform: "Zomato", status: "Scheduled" },
-    { id: "#PB2403", date: "20 Jun 2026", items: "Pongal", amount: 55, platform: "Swiggy", status: "Refunded" },
-    { id: "#PB2404", date: "19 Jun 2026", items: "Upma + Tea", amount: 65, platform: "Zomato", status: "Cancelled" },
-  ];
+  const [orders, setOrders] = useState([]);
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.items.toLowerCase().includes(search.toLowerCase()) || 
-                         order.id.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  useEffect(() => {
+    axios
+        .get("http://localhost:5000/order")
+        .then((res) => {
+            setOrders(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}, []);
+
+  const filteredOrders = orders.filter((order) => {
+
+  const matchesSearch =
+    order.item_name.toLowerCase().includes(search.toLowerCase()) ||
+    (`#PB${2400 + order.order_id}`)
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+  const matchesStatus =
+    statusFilter === "All" ||
+    order.order_status.toUpperCase() === statusFilter.toUpperCase();
+
+  return matchesSearch && matchesStatus;
+});
 
   return (
     <div className="orders-page">
@@ -34,10 +49,10 @@ const Orders = () => {
           />
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="All">All Status</option>
-            <option value="Scheduled">Scheduled</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Refunded">Refunded</option>
+            <option value="SCHEDULED">Scheduled</option>
+<option value="COMPLETED">Completed</option>
+<option value="CANCELLED">Cancelled</option>
+            <option value="REFUNDED">Refunded</option>
           </select>
         </div>
       </div>
@@ -46,39 +61,50 @@ const Orders = () => {
 
 
   <div className="stat-card">
-    <h3>Total Orders</h3>
-    <p>{orders.length}</p>
-  </div>
+  <h3>Total Orders</h3>
+  <p>{orders.length}</p>
+</div>
 
   <div className="stat-card">
     <h3>Scheduled</h3>
-    <p>{orders.filter(o => o.status === "Scheduled").length}</p>
+    <p>{orders.filter(
+  o => o.order_status?.toUpperCase() === "SCHEDULED"
+).length}</p>
   </div>
 
   <div className="stat-card">
     <h3>Completed</h3>
-    <p>{orders.filter(o => o.status === "Completed").length}</p>
+    <p>{orders.filter(
+  o => o.order_status?.toUpperCase() === "COMPLETED"
+).length}</p>
   </div>
 
   <div className="stat-card">
     <h3>Refunded</h3>
-    <p>{orders.filter(o => o.status === "Refunded").length}</p>
+    <p>{orders.filter(o => o.order_status?.toUpperCase() === "REFUNDED").length}</p>
   </div>
 
 <div className="stat-card">
   <h3>Cancelled</h3>
-  <p>{orders.filter(o => o.status === "Cancelled").length}</p>
+  <p>{orders.filter(o => o.order_status?.toUpperCase() === "CANCELLED").length}</p>
 </div>
 
 </div>
 <div className="upcoming-card">
-  <h3>🚀 Upcoming Delivery</h3>
 
-  <div className="upcoming-item">
-    <p><strong>Dosa + Coffee</strong></p>
-    <p>Tomorrow • 7:30 AM</p>
-    <p>Swiggy</p>
+  <div className="upcoming-header">
+    <h3>🚀 Upcoming Delivery</h3>
+    <span className="upcoming-status">Scheduled</span>
   </div>
+
+  <h2 className="upcoming-food">🥞 Dosa + Coffee</h2>
+
+  <div className="upcoming-details">
+    <div>📅 <span>Tomorrow</span></div>
+    <div>🕢 <span>7:30 AM</span></div>
+    <div>🛵 <span>Swiggy</span></div>
+  </div>
+
 </div>
 
       <div className="card">
@@ -94,47 +120,123 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map(order => (
-              <tr
-  key={order.id}
-  onClick={() => setSelectedOrder(order)}
-  style={{ cursor: "pointer" }}
->
-                <td><strong>{order.id}</strong></td>
-                <td>{order.date}</td>
-                <td>{order.items}</td>
-                <td>₹{order.amount}</td>
-                <td>
-  <span
-    className={
-      order.platform === "Swiggy"
-        ? "platform-badge swiggy"
-        : "platform-badge zomato"
-    }
-  >
-    {order.platform === "Swiggy"
-      ? "🟧 Swiggy"
-      : "🔴 Zomato"}
-  </span>
+
+  {filteredOrders.length > 0 ? (
+
+    filteredOrders.map(order => (
+
+      <tr
+        key={order.id}
+        onClick={() => setSelectedOrder(order)}
+        style={{ cursor: "pointer" }}
+      >
+
+        <td><strong>#PB{2400 + order.order_id}</strong></td>
+
+        <td>
+  {new Date(order.schedule_date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })}
 </td>
-                <td><span className={`status status-${order.status.toLowerCase()}`}>{order.status}</span></td>
-              </tr>
-            ))}
-          </tbody>
+
+        <td>
+  {order.quantity} {order.item_name}
+</td>
+
+        <td>₹{order.price * order.quantity}</td>
+
+        <td>
+          <span
+            className={
+              order.platform_name === "Swiggy"
+                ? "platform-badge swiggy"
+                : "platform-badge zomato"
+            }
+          >
+            {order.platform_name === "Swiggy"
+              ? "🟧 Swiggy"
+              : "🔴 Zomato"}
+          </span>
+        </td>
+
+        <td>
+          <span
+  className={`status status-${order.order_status.toLowerCase()}`}
+>
+  {order.order_status}
+</span>
+        </td>
+
+      </tr>
+
+    ))
+
+  ) : (
+
+    <tr>
+
+      <td colSpan="6" className="empty-orders">
+        <h3>No Orders Found</h3>
+
+        <p>Try another search or filter.</p>
+
+      </td>
+
+    </tr>
+
+  )}
+
+</tbody>
         </table>
       </div>
       {selectedOrder && (
   <div className="modal-overlay">
     <div className="modal-content">
-
       <h2>Order Details</h2>
 
-      <p><strong>Order ID:</strong> {selectedOrder.id}</p>
-      <p><strong>Items:</strong> {selectedOrder.items}</p>
-      <p><strong>Date:</strong> {selectedOrder.date}</p>
-      <p><strong>Platform:</strong> {selectedOrder.platform}</p>
-      <p><strong>Status:</strong> {selectedOrder.status}</p>
-      <p><strong>Amount:</strong> ₹{selectedOrder.amount}</p>
+      <div className="detail-row">
+        <span>Order ID</span>
+        <strong>#PB{2400 + selectedOrder.order_id}</strong>
+      </div>
+
+      <div className="detail-row">
+        <span>Date</span>
+        <strong>{selectedOrder.schedule_date}</strong>
+      </div>
+
+      <div className="detail-row">
+        <span>Items</span>
+        <strong>{selectedOrder.quantity} {selectedOrder.item_name}</strong>
+      </div>
+
+      <div className="detail-row">
+        <span>Platform</span>
+        <span
+          className={
+            selectedOrder.platform_name === "Swiggy"
+              ? "platform-badge swiggy"
+              : "platform-badge zomato"
+          }
+        >
+          {selectedOrder.platform_name}
+        </span>
+      </div>
+
+      <div className="detail-row">
+        <span>Status</span>
+        <span className={`status status-${selectedOrder.order_status.toLowerCase()}`}>
+          {selectedOrder.order_status}
+        </span>
+      </div>
+
+      <hr />
+
+      <div className="detail-total">
+        <span>Total Amount</span>
+        <strong>₹{selectedOrder.price * selectedOrder.quantity}</strong>
+      </div>
 
       <button
         className="btn btn-primary"

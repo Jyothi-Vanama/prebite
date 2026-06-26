@@ -23,20 +23,33 @@
   margin-bottom: 2rem;
 }
 
-.amount-input {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-  font-size: 2rem;
+.amount-input{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    width:280px;
+
+    padding:14px 18px;
+
+    border:1px solid #E5E7EB;
+    border-radius:12px;
+
+    margin:18px 0;
+
+    background:#fff;
 }
 
-.amount-input input {
-  border: none;
-  font-size: 2rem;
-  width: 150px;
-  background: transparent;
-  font-weight: 600;
+.amount-input input{
+    border:none;
+    outline:none;
+
+    font-size:28px;
+    font-weight:600;
+
+    width:100%;
+
+    background:transparent;
 }
 
 .transaction-item {
@@ -51,3 +64,14 @@
 
 .amount.credit, .amount.refund { color: #10B981; }
 .amount.debit { color: #EF4444; }
+
+.amount-input input::-webkit-outer-spin-button,
+.amount-input input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+
+.amount-input input[type=number]{
+    appearance: textfield;
+    -moz-appearance: textfield;
+}

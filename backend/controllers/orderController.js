@@ -24,20 +24,49 @@ const createOrder = (req, res) => {
 
 const getOrders = (req, res) => {
 
-    db.query(
-        "SELECT * FROM orders",
-        (err, result) => {
+    const sql = `
+    SELECT
+        o.order_id,
+        o.order_status,
+        o.execution_time,
 
-            if (err) {
-                console.log(err);
-                res.send("Error fetching orders");
-            } else {
-                res.json(result);
-            }
+        s.schedule_date,
+        s.platform_name,
 
+        f.food_name AS item_name,
+        si.quantity,
+
+        f.price
+
+    FROM orders o
+
+    JOIN schedules s
+        ON o.schedule_id = s.schedule_id
+
+    JOIN schedule_items si
+        ON s.schedule_id = si.schedule_id
+
+    JOIN food_items f
+        ON si.food_id = f.food_id
+
+    ORDER BY o.order_id DESC;
+    `;
+
+    db.query(sql, (err, result) => {
+
+        if (err) {
+            console.log(err);
+            return res.status(500).json(err);
         }
-    );
 
+        res.json(result);
+
+    });
+
+};
+
+module.exports = {
+    getOrders
 };
 
 const getOrderDetails = (req, res) => {

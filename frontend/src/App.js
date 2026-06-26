@@ -7,6 +7,7 @@ import Wallet from './pages/Wallet';
 import ScheduleBreakfast from './pages/ScheduleBreakfastV2';
 import Orders from './pages/Orders';
 import './styles/App.css';
+import Notifications from "./pages/Notifications/Notifications";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/schedule" element={<ScheduleBreakfast />} />
               <Route path="/orders" element={<Orders />} />
+              <Route path="/notifications" element={<Notifications />} />
             </Routes>
           </div>
         </div>
