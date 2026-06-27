@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🍳 PreBite
+# PreBite
 
 ### Smart Breakfast Scheduler with Automated Ordering & Refund System
 
@@ -10,26 +10,26 @@
 
 ---
 
-## 📌 Overview
+## Overview
 
 PreBite helps users plan breakfast in advance by allowing them to schedule meals for multiple days. The application automates scheduling workflows, manages wallet transactions, tracks orders, and processes refunds through a simulated ordering system.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-* 🔐 Secure User Authentication
-* 📅 Multi-Day Breakfast Scheduling
-* 🍽️ Breakfast Menu Selection
-* 💰 Wallet Management
-* 💳 Transaction & Refund Processing
-* 📧 Email Reminder System
-* 📜 Order History
-* 📊 Dashboard & Analytics
+*  Secure User Authentication
+*  Multi-Day Breakfast Scheduling
+*  Breakfast Menu Selection
+*  Wallet Management
+*  Transaction & Refund Processing
+*  Email Reminder System
+*  Order History
+*  Dashboard & Analytics
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Frontend | Backend    | Database | Authentication |
 | -------- | ---------- | -------- | -------------- |
@@ -38,7 +38,7 @@ PreBite helps users plan breakfast in advance by allowing them to schedule meals
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 PreBite
@@ -46,26 +46,6 @@ PreBite
 ├── backend
 └── README.md
 ```
-
----
-
-## 🚀 Current Status
-
-✅ Authentication
-
-✅ Dashboard
-
-✅ Wallet Module
-
-✅ Order Management
-
-✅ Backend API Integration
-
-🚧 Schedule Module
-
-🚧 Email Reminder Integration
-
-🚧 Refund Workflow Enhancements
 
 ---
 
