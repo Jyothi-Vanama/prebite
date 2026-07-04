@@ -8,6 +8,7 @@ import ScheduleBreakfast from './pages/ScheduleBreakfastV2';
 import Orders from './pages/Orders';
 import './styles/App.css';
 import Notifications from "./pages/Notifications/Notifications";
+import BreakfastMenu from "./pages/BreakfastMenu";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/schedule" element={<ScheduleBreakfast />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/breakfast-menu" element={<BreakfastMenu />} />
             </Routes>
           </div>
         </div>

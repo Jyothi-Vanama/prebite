@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './ScheduleBreakfast.css';
 import { FaTrash } from 'react-icons/fa';
 import idliImage from '../assets/breakfasts/idli.jpg';
@@ -35,25 +36,46 @@ const ScheduleBreakfast = () => {
       : [...prev, index]
   );
 };
-  useEffect(() => {
+useEffect(() => {
+
     const start = new Date(fromDate);
     const end = new Date(toDate);
+
+    // Maximum 7 days validation
+    const diffDays = (end - start) / (1000 * 60 * 60 * 24);
+
+    if (diffDays > 6) {
+
+    alert("You can schedule breakfast for a maximum of 7 days.");
+
+    const maxDate = new Date(start);
+    maxDate.setDate(start.getDate() + 6);
+
+    setToDate(maxDate.toISOString().split("T")[0]);
+
+    return;
+}
+
     const generatedPlanner = [];
     let current = new Date(start);
 
     while (current <= end) {
-      generatedPlanner.push({
-        date: current.toISOString().split('T')[0],
-        items: [],
-        platform,
-        deliveryTime: '07:30',
-      });
-      current.setDate(current.getDate() + 1);
+
+        generatedPlanner.push({
+            date: current.toISOString().split("T")[0],
+            items: [],
+            platform,
+            deliveryTime: "07:30",
+        });
+
+        current.setDate(current.getDate() + 1);
+
     }
 
     setPlanner(generatedPlanner);
     setActiveDays([0]);
-  }, [fromDate, toDate, platform]);
+
+}, [fromDate, toDate, platform]);
 
   const plannerTotal = planner.reduce((total, day) => {
     const dayTotal = day.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -62,6 +84,58 @@ const ScheduleBreakfast = () => {
 
   const grandTotal = plannerTotal + schedulingFee;
   const hasBreakfast = planner.some((day) => day.items.length > 0);
+
+const handleSchedule = async () => {
+
+    console.log("🚀 MULTI DAY FUNCTION");
+
+    const scheduledDays = planner.filter(day => day.items.length > 0);
+
+    if (scheduledDays.length === 0) {
+        alert("Please select at least one breakfast item.");
+        return;
+    }
+
+    try {
+
+        for (const day of scheduledDays) {
+
+            console.log("Saving:", day.date);
+
+            const foodCost = day.items.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+            );
+
+            const response = await axios.post(
+                "http://localhost:5000/schedule",
+                {
+                    user_id: 1,
+                    day: {
+                        date: day.date,
+                        deliveryTime: day.deliveryTime,
+                        platform: day.platform,
+                        foodCost: foodCost,
+                        totalCost: foodCost + schedulingFee,
+                        items: day.items
+                    }
+                }
+            );
+
+            console.log("Created Schedule:", response.data);
+
+        }
+
+        setShowSuccess(true);
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Failed to schedule breakfast.");
+
+    }
+
+};
 
   return (
     <div className="schedule-page">
@@ -307,6 +381,8 @@ const ScheduleBreakfast = () => {
                     </div>
                   ))}
 
+                  
+
                 </div>
               );
             })}
@@ -329,7 +405,8 @@ const ScheduleBreakfast = () => {
             <button
               className="btn btn-primary schedule-btn"
               disabled={!hasBreakfast}
-              onClick={() => setShowSuccess(true)}
+              onClick={handleSchedule
+              }
             >
               Schedule Breakfast
               <br />
@@ -352,10 +429,8 @@ const ScheduleBreakfast = () => {
       {showSuccess && (
         <div className="modal-overlay">
           <div className="success-modal">
-            <div className="success-icon">✅</div>
-            <h2>Breakfast Scheduled!</h2>
-            <p>Your breakfast has been scheduled successfully.</p>
-            <hr />
+
+<h2>Schedule Receipt</h2>
 
             {planner
               .filter((day) => day.items.length > 0)
@@ -364,27 +439,67 @@ const ScheduleBreakfast = () => {
                   key={`${day.date}-${index}`}
                   style={{ textAlign: 'left', marginTop: '10px', marginBottom: '14px' }}
                 >
-                  <strong style={{ color: '#FF7A30' }}>
-                    {new Date(day.date).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                    })}
-                  </strong>
-                  {day.items.map((item, itemIndex) => (
-                    <div key={`${item.id}-${itemIndex}`}>
-                      • {item.name} × {item.quantity}
-                    </div>
-                  ))}
+                  <div className="receipt-day-header">
+
+    <span className="receipt-date">
+    {new Date(day.date).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+    })}{" "}
+    • {day.deliveryTime}
+</span>
+
+    <span
+        className={`platform-badge ${
+            day.platform === "Swiggy"
+                ? "swiggy-badge"
+                : "zomato-badge"
+        }`}
+    >
+        {day.platform.toUpperCase()}
+    </span>
+
+</div>
+
+{day.items.map((item, itemIndex) => (
+
+    <div
+        key={`${item.id}-${itemIndex}`}
+        className="receipt-item"
+    >
+
+        <span>
+            {item.name} × {item.quantity}
+        </span>
+
+        <span>
+            ₹{item.price * item.quantity}
+        </span>
+
+    </div>
+
+))}
+
+<hr className="receipt-divider" />
                 </div>
               ))}
 
-            <hr />
-            <p>
-              <strong>Platform:</strong> {platform}
-            </p>
-            <p>
-              <strong>Grand Total:</strong> ₹{grandTotal}
-            </p>
+<div className="receipt-total">
+    <span>Items Total</span>
+    <span>₹{plannerTotal}</span>
+</div>
+
+<div className="receipt-total">
+    <span>Scheduling Fee</span>
+    <span>₹{schedulingFee}</span>
+</div>
+
+<hr className="receipt-divider" />
+
+<div className="receipt-grand-total">
+    <span>Grand Total</span>
+    <span>₹{grandTotal}</span>
+</div>
 
             <button className="btn btn-primary" style={{ marginBottom: '12px' }} onClick={() => setShowSuccess(false)}>
               Close

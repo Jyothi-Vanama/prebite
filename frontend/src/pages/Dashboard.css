@@ -117,3 +117,51 @@
   border-radius: 12px;
   margin-bottom: 15px;
 } */
+
+.popular-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.view-menu-link{
+    color:#ff6b00;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.view-menu-link:hover{
+    color:#ff8a3d;
+}
+
+.menu-card{
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+text-decoration:none;
+
+color:#222;
+
+}
+
+.menu-card:hover{
+
+transform:translateY(-5px);
+
+}
+
+.menu-icon{
+
+font-size:42px;
+
+margin-bottom:12px;
+
+}

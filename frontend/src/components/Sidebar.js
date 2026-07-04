@@ -10,7 +10,10 @@ const Sidebar = () => {
     { path: '/wallet', label: 'Wallet', icon: '💰' },
     { path: '/schedule', label: 'Schedule Breakfast', icon: '🍳' },
     { path: '/orders', label: 'Orders', icon: '📋' },
+    { path: '/notifications', label: 'Notifications', icon: '🔔' },
   ];
+
+
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>

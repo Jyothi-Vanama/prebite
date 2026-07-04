@@ -1,0 +1,182 @@
+.breakfast-page{
+
+padding:30px;
+
+}
+
+.menu-header{
+
+margin-bottom:30px;
+
+}
+
+.menu-header h1{
+
+font-size:34px;
+
+margin-bottom:8px;
+
+color:#222;
+
+}
+
+.menu-header p{
+
+color:#777;
+
+font-size:16px;
+
+}
+
+.search-box{
+
+margin-bottom:30px;
+
+}
+
+.search-box input{
+
+width:100%;
+
+padding:15px;
+
+font-size:16px;
+
+border-radius:12px;
+
+border:1px solid #ddd;
+
+outline:none;
+
+}
+
+.food-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+
+gap:25px;
+
+}
+
+.food-card{
+
+background:white;
+
+border-radius:18px;
+
+overflow:hidden;
+
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.food-card:hover{
+
+transform:translateY(-6px);
+
+}
+
+.food-card img{
+
+width:100%;
+
+height:180px;
+
+object-fit:cover;
+
+}
+
+.food-card h3{
+
+margin:15px;
+
+margin-bottom:5px;
+
+}
+
+.price{
+
+margin-left:15px;
+
+color:#ff6b00;
+
+font-weight:bold;
+
+font-size:20px;
+
+}
+
+.food-card p{
+
+margin:15px;
+
+color:#666;
+
+}
+
+.category{
+
+margin-left:15px;
+
+display:inline-block;
+
+padding:6px 14px;
+
+background:#fff3e8;
+
+color:#ff6b00;
+
+border-radius:20px;
+
+font-size:13px;
+
+}
+
+.food-card button{
+
+margin:20px 15px;
+
+width:calc(100% - 30px);
+
+padding:12px;
+
+background:#2563eb;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+.food-card button:hover{
+
+background:#1d4ed8;
+
+}
+
+.availability{
+    margin:18px 15px;
+    color:#16a34a;
+    font-weight:600;
+    font-size:14px;
+}
+
+.category-dropdown{
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    width:220px;
+    font-size:15px;
+    background:white;
+}

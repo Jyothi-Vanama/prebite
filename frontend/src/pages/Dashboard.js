@@ -6,6 +6,7 @@ import idliImage from '../assets/breakfasts/idli.jpg';
 import dosaImage from '../assets/breakfasts/dosa.png';
 import pongalImage from '../assets/breakfasts/pongal.jpg';
 import upmaImage from '../assets/breakfasts/upma.jpg';
+import { Link } from "react-router-dom";
 
 
 const Dashboard = () => {
@@ -101,6 +102,18 @@ useEffect(() => {
 
   <p>Quick Morning Meal</p>
 </div>
+
+<Link to="/breakfast-menu" className="breakfast-card menu-card">
+
+    <div className="menu-icon">
+        🍽️
+    </div>
+
+    <h3>View Full Menu</h3>
+
+    <p>Explore all breakfast items →</p>
+
+</Link>
 
   </div>
 </div>
