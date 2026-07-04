@@ -2,14 +2,19 @@ const db = require("../config/db");
 
 const createSchedule = (req, res) => {
 
-    const {
-        user_id,
-        schedule_date,
-        schedule_time,
-        platform_name,
-        food_cost,
-        total_cost
-    } = req.body;
+    console.log("Received Data:");
+    console.log(req.body);
+
+    const { user_id, day } = req.body;
+
+const schedule_date = day.date;
+const schedule_time = day.deliveryTime;
+const platform_name = day.platform;
+const food_cost = day.foodCost;
+const total_cost = day.totalCost;
+const items = day.items;
+console.log("Items Received:");
+console.log(items);
 
     const query = `
         INSERT INTO schedules
@@ -40,8 +45,43 @@ const createSchedule = (req, res) => {
                 console.log(err);
                 res.send("Error creating schedule");
             } else {
-                res.send("Schedule Created Successfully");
-            }
+
+    const schedule_id = result.insertId;
+
+    console.log("New Schedule ID:", schedule_id);
+
+    const values = items.map((item) => [
+    schedule_id,
+    item.id,
+    item.quantity,
+    item.price
+]);
+
+const itemQuery = `
+    INSERT INTO schedule_items
+    (
+        schedule_id,
+        food_id,
+        quantity,
+        price_at_schedule_time
+    )
+    VALUES ?
+`;
+
+db.query(itemQuery, [values], (err) => {
+
+    if (err) {
+        console.log(err);
+        return res.send("Error adding schedule items");
+    }
+
+    res.json({
+        message: "Schedule Created Successfully"
+    });
+
+});
+
+}
 
         }
     );
